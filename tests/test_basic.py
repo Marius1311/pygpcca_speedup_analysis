@@ -2,12 +2,12 @@ import anndata as ad
 import numpy as np
 import pytest
 
-import myanalysis
-from myanalysis import FilePaths, qc_violin
+import speedup_analysis
+from speedup_analysis import FilePaths, qc_violin
 
 
 def test_package_has_version():
-    assert myanalysis.__version__ is not None
+    assert speedup_analysis.__version__ is not None
 
 
 def test_filepaths_root_exists():

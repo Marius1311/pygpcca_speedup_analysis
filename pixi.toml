@@ -1,8 +1,8 @@
 [workspace]
-name = "analysis-template"
+name = "pygpcca-speedup-analysis"
 version = "0.1.0"
-description = "Template for single-cell/spatial analysis projects (pixi-managed)"
-authors = ["Your Name <your.email@example.com>"]
+description = "Benchmarking pyGPCCA optimization speedups (L-BFGS-B, multi-start, Krylov)"
+authors = ["Marius Lange <marius.lange@bsse.ethz.ch>"]
 channels = ["conda-forge"]
 platforms = ["osx-arm64", "linux-64"]
 
@@ -12,7 +12,7 @@ extra-index-urls = ["https://pypi.nvidia.com"]
 [tasks]
 lab = "jupyter lab"
 test = "pytest"
-install-kernel = "python -m ipykernel install --user --name=analysis-template --display-name='Analysis Template (Pixi)'"
+install-kernel = "python -m ipykernel install --user --name=pygpcca-speedup --display-name='pyGPCCA Speedup Analysis (Pixi)'"
 
 [dependencies]
 python = "3.12.*"
@@ -45,7 +45,8 @@ scikit-learn = "<1.8"
 scanpy = ">=1.10"
 squidpy = "*"
 scvi-tools = "*"
-cellrank = "*"
+cellrank = { path = "../cellrank", editable = true }
+pygpcca = { path = "../pyGPCCA", editable = true }
 torch = "*"
 
 # Notebook workflow
@@ -64,6 +65,6 @@ pytest = "*"
 session-info2 = "*"
 
 # Local editable package for path helpers
-myanalysis = { path = ".", editable = true }
+speedup_analysis = { path = ".", editable = true }
 igraph = ">=1.0.0, <2"
 celltypist = ">=1.7.1, <2"

@@ -1,13 +1,36 @@
-# Copilot Instructions for Analysis Template
+# Copilot Instructions for pyGPCCA Speedup Analysis
 
-## Project context
+## What this repo does
 
-See the project README for details about the project goal, datasets, and structure.
+Benchmarks comparing pyGPCCA optimization methods (NM, L-BFGS-B, multi-start) on synthetic and real CellRank datasets. See README for benchmark overview and key findings.
 
 ## Critical rules
 - **Don't update Jupyter notebooks** — I manage them myself
 - Use `pixi run <command>` or `pixi shell` for all commands
 - Summarize in chat, don't create markdown summary files
+
+## Sibling repos (editable installs via pixi.toml)
+
+- **`../pyGPCCA`** (`feature/gradient-optimization`): Jacobian, L-BFGS-B support, multi-start SO(k) perturbation in `_gpcca.py`. See its copilot instructions for algorithm details.
+- **`../cellrank`**: GPCCA estimator with `optimizer`, `n_starts`, `perturbation_scale`, `seed` passthrough in `compute_macrostates()`.
+
+## Benchmark conventions
+
+- Scripts live in `analysis/<NN>_<topic>/benchmark_<name>.py`
+- All scripts are standalone — run with `pixi run python analysis/.../script.py`
+- Scripts print Markdown tables to stdout (Tables A/B/C pattern)
+- Datasets come from `cr.datasets.pancreas(kind="raw")` and `cr.datasets.bone_marrow()`
+- Both use `PseudotimeKernel` with `palantir_pseudotime`
+
+## Key parameters
+
+| Parameter | Recommended | Notes |
+|-----------|-------------|-------|
+| `optimizer` | `"L-BFGS-B"` | Gradient-based, uses analytical Jacobian |
+| `n_starts` | `10` | Multi-start with SO(k) rotation perturbation |
+| `perturbation_scale` | `0.1` | Angular scale; 0.1 rad best across sweeps |
+| `seed` | `0` | For reproducibility |
+| `method` (Schur) | `"krylov"` for m>20 | Requires PETSc/SLEPc (provided by pixi env) |
 
 ## Quick reference
 
@@ -15,13 +38,4 @@ See the project README for details about the project goal, datasets, and structu
 |------|---------|
 | Run Python | `pixi run python script.py` |
 | Run tests | `pixi run test` |
-| Add conda package | `pixi add <package>` |
-| Add PyPI package | `pixi add --pypi <package>` |
-
-## Project structure
-- **Notebooks**: `analysis/[INITIALS]-[YYYY]-[MM]-[DD]_description.ipynb`
-- **Data**: `data/<dataset>/{raw,processed,resources,results}/`
-- **Paths**: Use `from <package> import FilePaths` (edit `_constants.py` for datasets)
-- **Deps**: All in `pixi.toml` (not pyproject.toml)
-- pyproject.toml exists mainly for package metadata and testing
-- Run `pixi install` after pulling changes that update `pixi.toml`
+| Reinstall after pyGPCCA/CellRank changes | `pixi install` |

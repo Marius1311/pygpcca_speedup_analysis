@@ -3,7 +3,7 @@ build-backend = "hatchling.build"
 requires = [ "hatch-vcs", "hatchling" ]
 
 [project]
-name = "myanalysis"
+name = "speedup_analysis"
 # Minimal metadata - project info lives in pixi.toml
 # Only the package name matters here (must match src/NAME/ directory)
 readme = "README.md"
